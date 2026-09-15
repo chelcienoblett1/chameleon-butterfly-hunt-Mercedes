@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chameleon Butterfly Classroom Hunt</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#eaf5ed;color:#173b2a;font-family:Arial,sans-serif}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+h1{text-align:center;margin:0 0 5px;font-size:clamp(28px,5vw,46px)}
+.sub{text-align:center;margin:0 0 14px;font-size:18px}
+.bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.pill,button{border:0;border-radius:999px;padding:10px 16px;font-weight:bold}
+.pill{background:white;box-shadow:0 2px 8px #0002}
+button{background:#377d4d;color:white;cursor:pointer}
+button:hover{background:#28643b}
+.hint{background:#6a65c7}
+#scene{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:20px;border:5px solid white;box-shadow:0 5px 22px #0002;
+background:linear-gradient(#bfe7f7 0 43%,#ead7b8 43% 100%)}
+.wallboard{position:absolute;left:8%;top:7%;width:40%;height:34%;background:#f8f5e9;border:9px solid #7697a0;border-radius:6px;padding:18px;text-align:center;color:#254d42}
+.wallboard h2{margin:0;font-size:clamp(20px,3vw,36px);color:#2f6290}
+.wallboard p{margin:8px;font-size:clamp(12px,1.8vw,20px)}
+.classposter{position:absolute;right:9%;top:8%;width:18%;height:27%;background:#fff8d7;border:5px solid #d9c87a;border-radius:8px;padding:10px;text-align:center;font-size:clamp(11px,1.5vw,18px);font-weight:bold}
+.window{position:absolute;right:4%;top:5%;width:24%;height:35%;background:#aee2f7;border:12px solid white;box-shadow:inset 0 0 0 4px #7c9eaa}
+.window:after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:4px solid #7c9eaa}
+.shelf{position:absolute;left:35%;bottom:26%;width:35%;height:22%;background:#a97448;border-radius:7px}
+.shelf:before,.shelf:after{content:"";position:absolute;left:0;right:0;height:8px;background:#70482d}
+.shelf:before{top:50%}.shelf:after{bottom:0}
+.book{position:absolute;bottom:6%;width:11%;height:32%;border-radius:3px 3px 0 0}
+.plant{position:absolute;font-size:clamp(25px,5vw,60px)}
+.table{position:absolute;bottom:7%;height:15%;width:29%;background:#bc8b58;border-radius:8px}
+.t1{left:3%}.t2{right:3%}
+.chair{position:absolute;bottom:8%;width:8%;height:16%;background:#3977ad;border-radius:15px 15px 5px 5px}
+.c1{left:25%}.c2{right:25%}
+.rug{position:absolute;left:30%;right:30%;bottom:2%;height:19%;background:#567db0;border-radius:50%;opacity:.9}
+.pencilpot{position:absolute;font-size:32px}
+.butterfly{position:absolute;width:54px;height:40px;cursor:pointer;z-index:10;transition:.18s}
+.butterfly:before,.butterfly:after{content:"";position:absolute;top:0;width:27px;height:37px;background:var(--c);border:2px solid #3336;border-radius:75% 25% 75% 25%}
+.butterfly:before{left:0;transform:rotate(18deg)}
+.butterfly:after{right:0;transform:scaleX(-1) rotate(18deg)}
+.body{position:absolute;z-index:2;left:24px;top:5px;width:7px;height:32px;background:#4b4038;border-radius:8px}
+.hidden{opacity:.12;filter:saturate(.55)}
+.found{opacity:1;animation:pop .35s}
+.hintGlow{outline:5px solid #ffd43b;border-radius:50%}
+@keyframes pop{50%{transform:scale(1.4) rotate(8deg)}}
+#message{text-align:center;min-height:28px;font-size:18px;font-weight:bold;margin:10px 0 4px}
+.note{text-align:center;max-width:760px;margin:0 auto;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🦋 Chameleon Butterfly Hunt</h1>
+<p class="sub">Can you find all 5 butterflies hiding in our classroom?</p>
+
+<div class="bar">
+  <div class="pill">Found: <span id="found">0</span>/5</div>
+  <div class="pill">Time: <span id="time">0</span>s</div>
+  <button class="hint" onclick="giveHint()">🔎 Hint</button>
+  <button onclick="newRound()">New Hunt</button>
+</div>
+
+<div id="scene">
+  <div class="wallboard">
+    <h2>Our Class</h2>
+    <p>Be kind • Be curious • Be creative</p>
+    <p>🦋 Chameleon Butterflies 🦋</p>
+  </div>
+  <div class="classposter">🌿<br>Nature inspires us!<br><br>Observe<br>Explore<br>Discover</div>
+  <div class="window"></div>
+  <div class="shelf">
+    <span class="book" style="left:5%;background:#557fa0"></span>
+    <span class="book" style="left:18%;background:#c28a55"></span>
+    <span class="book" style="left:31%;background:#6b8c62"></span>
+    <span class="book" style="left:52%;background:#8d6a9f"></span>
+    <span class="book" style="left:67%;background:#b07a55"></span>
+    <span class="book" style="left:82%;background:#557fa0"></span>
+  </div>
+  <div class="plant" style="left:2%;top:11%">🌿</div>
+  <div class="plant" style="right:5%;top:22%">🪴</div>
+  <div class="rug"></div>
+  <div class="table t1"></div><div class="table t2"></div>
+  <div class="chair c1"></div><div class="chair c2"></div>
+  <div class="pencilpot" style="left:7%;bottom:17%">✏️</div>
+  <div class="pencilpot" style="right:8%;bottom:18%">📚</div>
+
+  <!-- Five deliberately camouflaged butterflies -->
+  <div class="butterfly hidden" style="--c:#668b57;left:13%;top:31%" data-found="0" onclick="find(this)"><span class="body"></span></div>
+  <div class="butterfly hidden" style="--c:#8a6a4b;left:43%;top:50%" data-found="0" onclick="find(this)"><span class="body"></span></div>
+  <div class="butterfly hidden" style="--c:#4f7890;left:75%;top:43%" data-found="0" onclick="find(this)"><span class="body"></span></div>
+  <div class="butterfly hidden" style="--c:#55754b;left:31%;top:73%" data-found="0" onclick="find(this)"><span class="body"></span></div>
+  <div class="butterfly hidden" style="--c:#927a55;left:87%;top:68%" data-found="0" onclick="find(this)"><span class="body"></span></div>
+</div>
+
+<div id="message">Look closely! They are camouflaged to blend into the classroom.</div>
+<p class="note">Click a butterfly when you spot it. Can you beat your best time?</p>
+</div>
+
+<script>
+let found=0,seconds=0,timer;
+const all=()=>document.querySelectorAll('.butterfly');
+function start(){clearInterval(timer);seconds=0;document.getElementById('time').textContent=0;
+timer=setInterval(()=>{seconds++;document.getElementById('time').textContent=seconds},1000)}
+function find(el){
+ if(el.dataset.found==="1")return;
+ el.dataset.found="1";el.classList.remove("hidden");el.classList.add("found");
+ found++;document.getElementById("found").textContent=found;
+ if(found===5){clearInterval(timer);document.getElementById("message").textContent=`🎉 Fantastic! You found all 5 in ${seconds} seconds!`}
+ else document.getElementById("message").textContent=`Great spotting! ${5-found} still hiding.`;
+}
+function giveHint(){
+ const x=[...all()].find(b=>b.dataset.found==="0");
+ if(!x){document.getElementById("message").textContent="You found them all! 🎉";return}
+ x.classList.add("hintGlow");setTimeout(()=>x.classList.remove("hintGlow"),1200);
+ document.getElementById("message").textContent="✨ Hint: one butterfly is hiding near a classroom object!";
+}
+function newRound(){
+ found=0;document.getElementById("found").textContent=0;
+ all().forEach(b=>{b.dataset.found="0";b.classList.remove("found","hintGlow");b.classList.add("hidden")});
+ document.getElementById("message").textContent="New hunt! The butterflies are hiding again.";
+ start();
+}
+start();
+</script>
+</body>
+</html>
